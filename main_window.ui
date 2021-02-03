@@ -302,7 +302,7 @@
          <string>수동 추가</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="file_open_btn">
         <property name="geometry">
          <rect>
           <x>610</x>
