@@ -1,19 +1,43 @@
+import os
+import time
 import requests
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
-# url + query
-url = 'https://search.shopping.naver.com/search/all?query=' + \
-    '주차번호판'+'&cat_id=&frm=NVSHATC'
-res = requests.get(url)
-res.raise_for_status()  # 에러시 종료
+# shopping url
+URL = "https://shopping.naver.com/"
+query = "주차번호판"
 
-soup = BeautifulSoup(res.text, "lxml")
-add_lst = soup.find_all('button', attrs={'class': 'ad_ad_stk__12U34'})
-cnt = 0
-for rank in add_lst:
-    if cnt == 10:
-        break
-    par = rank.parent.parent.parent
-    mall = par.find('div', attrs={'class': 'basicList_mall_title__3MWFY'})
-    print(mall.a.get_text())
-    cnt += 1
+# Find driver path
+DRIVER_DIR = os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__)))
+DRIVER_PATH = DRIVER_DIR + "\chromedriver.exe"
+
+# browser run
+browser = webdriver.Chrome(DRIVER_PATH)
+browser.get(URL)
+
+search_elem = browser.find_element_by_name("query")
+search_elem.send_keys(query)
+search_elem.send_keys(Keys.ENTER)
+
+
+# scroll down
+browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+
+# get html information
+# print(browser.page_source)
+
+# get rank
+ad_lst = browser.find_elements_by_class_name("ad_ad_stk__12U34")
+# print(ad_lst)
+for ad in ad_lst:
+    parent = ad.find_element_by_xpath("../../..")
+    element = parent.find_element_by_class_name("basicList_mall__sbVax")
+    print(element.text)
+
+
+# phase
+while True:
+    pass
