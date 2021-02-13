@@ -6,23 +6,6 @@ from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
 
-def scrolldown(browser):
-    prev_height = browser.execute_script("return document.body.scrollHeight")
-    interval = 1
-
-    while True:
-        browser.execute_script(
-            "window.scrollTo(0, document.body.scrollHeight)")
-
-        time.sleep(interval)
-
-        curr_height = browser.execute_script(
-            "return document.body.scrollHeight")
-
-        if curr_height == prev_height:
-            break
-
-
 # webdriver option setting
 options = webdriver.ChromeOptions()
 options.headless = True
@@ -32,6 +15,7 @@ options.add_argument("window-size=1920X1080")
 # shopping url & query
 URL = "https://shopping.naver.com/"
 query = "주차번호판"
+title = "조아애드 풀메탈 듀얼 야광 주차번호판 20여종"
 
 # Find driver path
 DRIVER_DIR = os.path.dirname(os.path.dirname(
@@ -51,29 +35,37 @@ search_elem.send_keys(Keys.ENTER)
 # print(browser.page_source)
 
 # want to find rank
-view_rank = 9
+view_rank = 12
+rank = 1
+find = False
 
 iter_cnt = view_rank//6 + 1
 
 for _ in range(iter_cnt):
     # scroll down
-    scrolldown(browser)
+    browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+    time.sleep(1)
 
     # bf4 instance
-    #soup = BeautifulSoup(browser.page_source, "lxml")
+    soup = BeautifulSoup(browser.page_source, "lxml")
 
-    # find ad element
-    ad_lst = browser.find_elements_by_class_name("ad_ad_stk__12U34")
+    ad_lst = soup.find_all("li", attrs={"class": "basicList_item__2XT81 ad"})
 
     for ad in ad_lst:
-        # parent div
-        parent = ad.find_element_by_xpath("../../..")
-        element = parent.find_element_by_class_name("basicList_mall__sbVax")
-        print(element.text)
+        link_element = ad.find("a", attrs={"class": "basicList_link__1MaTN"})
+        link = link_element["href"]
+        print(link_element.get_text())
+
+        if title == link_element.get_text():
+            print("rank : {}, title : {}".format(
+                rank, title
+            ))
+        rank += 1
 
     # next page
     next_btn = browser.find_element_by_class_name("pagination_next__1ITTf")
     next_btn.click()
+    time.sleep(1)
 
 
 # phase
