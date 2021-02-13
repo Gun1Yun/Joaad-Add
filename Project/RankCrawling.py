@@ -5,7 +5,13 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
-# shopping url
+# webdriver option setting
+options = webdriver.ChromeOptions()
+options.headless = True
+options.add_argument("window-size=1920X1080")
+
+
+# shopping url & query
 URL = "https://shopping.naver.com/"
 query = "주차번호판"
 
@@ -29,13 +35,24 @@ browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
 # get html information
 # print(browser.page_source)
 
-# get rank
-ad_lst = browser.find_elements_by_class_name("ad_ad_stk__12U34")
-# print(ad_lst)
-for ad in ad_lst:
-    parent = ad.find_element_by_xpath("../../..")
-    element = parent.find_element_by_class_name("basicList_mall__sbVax")
-    print(element.text)
+# want to find rank
+view_rank = 9
+
+iter_cnt = view_rank//6 + 1
+
+for _ in range(iter_cnt):
+    # find ad element
+    ad_lst = browser.find_elements_by_class_name("ad_ad_stk__12U34")
+
+    for ad in ad_lst:
+        # parent div
+        parent = ad.find_element_by_xpath("../../..")
+        element = parent.find_element_by_class_name("basicList_mall__sbVax")
+        print(element.text)
+
+    # next page
+    next_btn = browser.find_element_by_class_name("pagination_next__1ITTf")
+    next_btn.click()
 
 
 # phase
