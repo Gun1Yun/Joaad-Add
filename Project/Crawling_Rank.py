@@ -5,12 +5,10 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 
-
-# webdriver option setting
-options = webdriver.ChromeOptions()
-options.headless = True
-options.add_argument("window-size=1920X1080")
-
+# initialize class name
+li_tag_ad = "basicList_item__2XT81 ad"
+a_tag_item = "basicList_link__1MaTN"
+next_btn_class = "pagination_next__1ITTf"
 
 # shopping url & query
 URL = "https://shopping.naver.com/"
@@ -21,6 +19,16 @@ title = "조아애드 풀메탈 듀얼 야광 주차번호판 20여종"
 DRIVER_DIR = os.path.dirname(os.path.dirname(
     os.path.abspath(__file__)))
 DRIVER_PATH = DRIVER_DIR + "\chromedriver.exe"
+
+# webdriver option setting
+options = webdriver.ChromeOptions()
+options.headless = True
+options.add_argument("window-size=1920X1080")
+
+
+def get_rank(query, find_title):
+    print(1)
+
 
 # browser run
 browser = webdriver.Chrome(DRIVER_PATH)
@@ -49,10 +57,10 @@ for _ in range(iter_cnt):
     # bf4 instance
     soup = BeautifulSoup(browser.page_source, "lxml")
 
-    ad_lst = soup.find_all("li", attrs={"class": "basicList_item__2XT81 ad"})
+    ad_lst = soup.find_all("li", attrs={"class": li_tag_ad})
 
     for ad in ad_lst:
-        link_element = ad.find("a", attrs={"class": "basicList_link__1MaTN"})
+        link_element = ad.find("a", attrs={"class": a_tag_item})
         link = link_element["href"]
         print(link_element.get_text())
 
@@ -63,7 +71,7 @@ for _ in range(iter_cnt):
         rank += 1
 
     # next page
-    next_btn = browser.find_element_by_class_name("pagination_next__1ITTf")
+    next_btn = browser.find_element_by_class_name(next_btn_class)
     next_btn.click()
     time.sleep(1)
 
