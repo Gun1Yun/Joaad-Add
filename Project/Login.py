@@ -6,10 +6,6 @@ url = "https://manage.searchad.naver.com/customers"
 login_btn_xpath = '//*[@id="root"]/div/div/div/div/div/div[2]/div/a'
 create_ad_btn_xpath = '//*[@id="root"]/div/div[2]/div/div[4]/div[1]/div/div/div/button'
 
-# input by parameter or databases plese delete in this code
-input_id = "joaad"
-input_pw = "jo022800"
-
 
 def login_ad_management(id, pw):
     browser = webdriver.Chrome()
@@ -21,8 +17,8 @@ def login_ad_management(id, pw):
     browser.find_element_by_xpath(login_btn_xpath).click()
 
     # input id & pwd
-    browser.find_element_by_name("id").send_keys(input_id)
-    browser.find_element_by_name("pw").send_keys(input_pw)
+    browser.find_element_by_name("id").send_keys(id)
+    browser.find_element_by_name("pw").send_keys(pw)
     time.sleep(0.1)
     browser.find_element_by_class_name("btn_login").click()
     time.sleep(1)
