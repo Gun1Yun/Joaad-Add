@@ -4,3 +4,5 @@
 *.log
 *.exe
 *.ui
+
+__pycache__/
