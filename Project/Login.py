@@ -27,10 +27,11 @@ def login_ad_management(id, pw):
 
 
 def main():
-    browser = login_ad_management(input_id, input_pw)
+    # test code
+    #browser = login_ad_management(input_id, input_pw)
 
     # click create add btn
-    browser.find_element_by_xpath(create_ad_btn_xpath).click()
+    # browser.find_element_by_xpath(create_ad_btn_xpath).click()
     while True:
         pass
 
